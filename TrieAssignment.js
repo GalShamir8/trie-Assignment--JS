@@ -55,7 +55,7 @@ class Trie {
         if (!flag) {
             let newNode = new Node(word.charAt(0));
             this.head.addNode(newNode);
-            this.addWord(newNode, word);
+            this.addWord(newNode, word.substring(1));
         }
     }
 
@@ -73,8 +73,8 @@ class Trie {
     handleInsert(node, word) {
         //breaking condition
         if (word.length === 1) {
-            if (node.allNodes.size > 0) {
-                let lst = this.node.allNodes.filter(n => n.val === word.charAt(0));
+            if (node.allNodes.length > 0) {
+                let lst = node.allNodes.filter(n => n.val === word.charAt(0));
                 if (lst.length > 0)
                     return;
             }
@@ -94,7 +94,7 @@ class Trie {
         if (!flag) {
             let newNode = new Node(word.charAt(0));
             node.addNode(newNode);
-            this.addWord(newNode, word);
+            this.addWord(newNode, word.substring(1));
         }
     }
 
@@ -153,17 +153,45 @@ class Trie {
         return false;
     }
 
-checkValid(word) {
-    return word && !!!word || !(word.length === 0) && this.head.val === word.charAt(0);
-}
+    checkValid(word) {
+        return word && !!!word || !(word.length === 0) && this.head.val === word.charAt(0);
+    }
 }
 
-t = new Trie("Amit");
-t.insert("Amir");
-t.search("Amil")
-console.log("Amir exist? " + t.search("Amir") + "\nAmit exist?" + t.search("Amit") +
-    "\nAmil exist? " + t.search("Amil"));
-t.remove("Amir");
-console.log("Amir exist? " + t.search("Amir") + "\nAmit exist? " + t.search("Amit") +
-    "\nAmil exist? " + t.search("Amil"));
+var ALL_NAMES = ["Amit", "Amil", "Amir", "Amira", "Avira", "Aml", "Aharon", "Aviahu", "Avri", "Anan"];
+
+class main {
+
+    static testTrie(trie) {
+        try {
+            console.log("\n-------------------------------------------------\n");
+            ALL_NAMES.forEach(word=> console.log(word + " exist? " + trie.search(word)))
+            console.log("\n-------------------------------------------------\n");
+            console.log("-----------After remove Amit and Avira-----------");
+            trie.remove("Amit");
+            trie.remove("Avira");
+            ALL_NAMES.forEach(word=> console.log(word + " exist? " + trie.search(word)))
+            console.log("\n-------------------------------------------------\n");
+
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
+
+    static hardCoded() {
+        let t = null;
+        try {
+        t = new Trie(ALL_NAMES[0]);
+        ALL_NAMES.forEach(word => t.insert(word))
+        }catch(error) {
+            console.log(error.message);
+        }
+        return t;
+    }
+}
+
+let trie = main.hardCoded();
+main.testTrie(trie);
+
 
